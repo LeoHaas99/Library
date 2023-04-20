@@ -1,23 +1,24 @@
 <template>
-    <div>
-        <div class="year-dropdown">
-            <label for="year-select">Select Year:</label>
-            <select id="year-select" v-model="selectedYear">
-                <option v-for="year in uniqueYears" :key="year" :value="year">{{ year }}</option>
-            </select>
-        </div>
-        <div class="grid-container">
-            <div v-for="(booksOfYear, year) in filteredBooksByYear" :key="year">
-                <div class="year-grid">
-                    <div class="grid-item" v-for="book in booksOfYear" :key="book.BuchId"
-                        :style="{ backgroundImage: `url(${API.IMAGE_URL}${book.BildUrl})` }"
-                        :class="{ 'double-size': book.Favorit === 1 }">
-                        <div class="book-info">
-                            <h3>{{ book.Buchtitel }}</h3>
-                            <p>{{ book.Autor }}</p>
-                            <p>{{ book.Seitenzahl }} Seiten</p>
-                            <p>{{ book.Jahr }}</p>
-                        </div>
+    <img id="logo" src="../../public/logo.svg" alt="Logo" />
+    <h1 id="title">Library</h1>
+    <div class="controls">
+        <button :disabled="!prevYear" @click="changeYear(-1)">&larr;</button>
+        <select v-model="selectedYear">
+            <option v-for="year in uniqueYears" :key="year" :value="year">{{ year }}</option>
+        </select>
+        <button :disabled="!nextYear" @click="changeYear(1)">&rarr;</button>
+    </div>
+    <div class="grid-container">
+        <div v-for="(booksOfYear, year) in filteredBooksByYear" :key="year">
+            <div class="year-grid">
+                <div class="grid-item" v-for="book in booksOfYear" :key="book.BuchId"
+                    :style="{ backgroundImage: `url(${API.IMAGE_URL}${book.BildUrl})` }"
+                    :class="{ 'double-size': book.Favorit === 1 }">
+                    <div class="book-info">
+                        <h3 class="bookTitle">{{ book.Buchtitel }}</h3>
+                        <p>{{ book.Autor }}</p>
+                        <p>{{ book.Seitenzahl }} Seiten</p>
+                        <p>{{ book.Jahr }}</p>
                     </div>
                 </div>
             </div>
@@ -73,12 +74,25 @@ const filteredBooksByYear = computed(() => {
         return booksByYear.value;
     }
 });
+
+const prevYear = computed(() => uniqueYears.value.includes(selectedYear.value - 1));
+const nextYear = computed(() => uniqueYears.value.includes(selectedYear.value + 1));
+
+function changeYear(offset) {
+    if (offset === -1 && prevYear.value) {
+        selectedYear.value -= 1;
+    } else if (offset === 1 && nextYear.value) {
+        selectedYear.value += 1;
+    }
+}
 </script>
   
   
 <style>
 .grid-container {
     padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .year-grid {
@@ -144,6 +158,63 @@ const filteredBooksByYear = computed(() => {
 .year-dropdown select {
     padding: 0.5rem;
     font-size: 1rem;
+}
+
+#logo {
+    height: 100px;
+    display: block;
+    margin: 0 auto;
+}
+
+#title {
+    text-align: center;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+button {
+  background-color: #6200ee;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #3700b3;
+}
+
+button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+select {
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin: 0 1rem;
+  border-radius: 4px;
+  border: 1px solid #bdbdbd;
+  appearance: none;
+  background-color: #ffffff;
+  transition: border-color 0.3s;
+}
+
+select:focus {
+  border-color: #6200ee;
+  outline: none;
+}
+
+.bookTitle{
+    text-align: center;
 }
 </style>
   
