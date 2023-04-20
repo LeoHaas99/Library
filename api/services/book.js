@@ -10,7 +10,7 @@ Retrieves a list of all employees including their information such as Id, Name, 
 */
 async function getAll() {
       const rows = await db.query(
-        `SELECT BuchId, Buchtitel, Autor, Seitenzahl, Jahr, BildUrl FROM buch
+        `SELECT BuchId, Buchtitel, Autor, Seitenzahl, Jahr, BildUrl, Favorit FROM buch
         JOIN autor ON autorid = fk_autorid
         ORDER BY BuchId`
       );
