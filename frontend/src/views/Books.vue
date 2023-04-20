@@ -9,27 +9,23 @@
         <button :disabled="!nextYear" @click="changeYear(1)">&rarr;</button>
     </div>
     <div class="grid-container">
-        <div v-for="(booksOfYear, year) in filteredBooksByYear" :key="year">
-            <div class="year-grid">
-                <div class="grid-item" :class="{ 'double-size': book.Favorit === 1 }" v-for="book in booksOfYear"
-                    :key="book.BuchId">
-                    <img :src="`${API.IMAGE_URL}${book.BildUrl}`" :alt="`${book.Buchtitel}`" :class="{ 'image-loaded': book.imageLoaded }"
-                        @load="book.imageLoaded = true">
-                    <div class="book-info">
-                        <h3 class="bookTitle">{{ book.Buchtitel }}</h3>
-                        <p>{{ book.Autor }}</p>
-                        <p>{{ book.Seitenzahl }} Seiten</p>
-                        <p>{{ book.Jahr }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div v-for="(booksOfYear, year) in filteredBooksByYear" :key="year">
+      <div class="year-grid">
+        <GridItem
+          v-for="book in booksOfYear"
+          :key="book.BuchId"
+          :book="book"
+          :imageUrl="API.IMAGE_URL"
+        />
+      </div>
     </div>
+  </div>
 </template>
   
 <script setup>
 import { ref, computed, watch } from 'vue';
 import API from '../services/api';
+import GridItem from '../components/GridItem.vue'
 
 const displayedBooks = ref([]);
 
@@ -89,8 +85,7 @@ function changeYear(offset) {
 }
 </script>
   
-  
-<style>
+<style scoped>
 .grid-container {
     padding: 1rem;
     max-width: 1200px;
@@ -103,103 +98,6 @@ function changeYear(offset) {
     gap: 3rem;
     margin-bottom: 2rem;
     grid-auto-flow: dense;
-}
-
-.grid-item {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 300px;
-    position: relative;
-    background-color: var(--color-gray);
-    overflow: hidden;
-}
-
-.grid-item img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.grid-item .image-loaded {
-    opacity: 1;
-}
-
-.grid-item .book-info {
-    z-index: 1;
-}
-
-.double-size {
-    grid-column-end: span 2;
-    grid-row-end: span 2;
-}
-
-.book-image-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 0.5rem;
-}
-
-.book-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.book-info {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-    color: white;
-}
-
-.grid-item:hover .book-info {
-    opacity: 1;
-}
-
-.year-dropdown {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
-
-.year-dropdown label {
-    margin-right: 1rem;
-}
-
-.year-dropdown select {
-    padding: 0.5rem;
-    font-size: 1rem;
 }
 
 .logo {
@@ -258,22 +156,13 @@ select:focus {
     outline: none;
 }
 
-.bookTitle {
-    text-align: center;
-}
-
+/* Add the following styles for additional responsiveness */
 @media screen and (max-width: 767px) {
     #title {
         font-size: 2.5rem;
         margin-bottom: 2rem;
     }
 }
-
-@media screen and (max-width: 500px) {
-  .double-size {
-    grid-column-end: span 1;
-    grid-row-end: span 1;
-  }
-}
 </style>
+
   
