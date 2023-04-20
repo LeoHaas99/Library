@@ -1,6 +1,9 @@
 <template>
-    <img id="logo" src="../../public/logo.svg" alt="Logo" />
-    <h1 id="title">Library</h1>
+    <div id="titleContainer">
+        <img id="logo" src="../../logo.svg" alt="Logo" />
+        <h1 id="title">Library</h1>
+        <img id="logo" src="../../logo.svg" alt="Logo" />
+    </div>
     <div class="controls">
         <button :disabled="!prevYear" @click="changeYear(-1)">&larr;</button>
         <select v-model="selectedYear">
@@ -168,53 +171,62 @@ function changeYear(offset) {
 
 #title {
     text-align: center;
+    font-size: 4rem;
+    margin-bottom: 4rem;
 }
 
 .controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
 
 button {
-  background-color: #6200ee;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+    background-color: var(--color-primary);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover:not(:disabled) {
-  background-color: #3700b3;
+    background-color: var(--color-primary-dark);
 }
 
 button:disabled {
-  background-color: #bdbdbd;
-  cursor: not-allowed;
+    background-color: #bdbdbd;
+    cursor: not-allowed;
 }
 
 select {
-  font-size: 1rem;
-  padding: 0.5rem;
-  margin: 0 1rem;
-  border-radius: 4px;
-  border: 1px solid #bdbdbd;
-  appearance: none;
-  background-color: #ffffff;
-  transition: border-color 0.3s;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    margin: 0 1rem;
+    border-radius: 4px;
+    border: 2px solid var(--color-secondary);
+    appearance: none;
+    background-color: #ffffff;
+    transition: border-color 0.3s;
 }
 
 select:focus {
-  border-color: #6200ee;
-  outline: none;
+    border-color: var(--color-secondary-dark);
+    outline: none;
 }
 
-.bookTitle{
+.bookTitle {
     text-align: center;
+}
+
+#titleContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 </style>
   
