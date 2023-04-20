@@ -12,4 +12,11 @@
   --color-gray: hsl(24, 10%, 69%);
   color: var(--color-black);
   background-color: var(--color-white);
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  margin: 0;
+  padding: 0;
 }

@@ -1,9 +1,6 @@
 <template>
-    <div id="titleContainer">
-        <img id="logo" src="../../logo.svg" alt="Logo" />
-        <h1 id="title">Library</h1>
-        <img id="logo" src="../../logo.svg" alt="Logo" />
-    </div>
+    <img class="logo" src="../../logo_white.svg" alt="Logo" />
+    <h1 id="title">Library</h1>
     <div class="controls">
         <button :disabled="!prevYear" @click="changeYear(-1)">&larr;</button>
         <select v-model="selectedYear">
@@ -14,9 +11,10 @@
     <div class="grid-container">
         <div v-for="(booksOfYear, year) in filteredBooksByYear" :key="year">
             <div class="year-grid">
-                <div class="grid-item" v-for="book in booksOfYear" :key="book.BuchId"
-                    :style="{ backgroundImage: `url(${API.IMAGE_URL}${book.BildUrl})` }"
-                    :class="{ 'double-size': book.Favorit === 1 }">
+                <div class="grid-item" :class="{ 'double-size': book.Favorit === 1 }" v-for="book in booksOfYear"
+                    :key="book.BuchId">
+                    <img :src="`${API.IMAGE_URL}${book.BildUrl}`" :alt="`${book.Buchtitel}`" :class="{ 'image-loaded': book.imageLoaded }"
+                        @load="book.imageLoaded = true">
                     <div class="book-info">
                         <h3 class="bookTitle">{{ book.Buchtitel }}</h3>
                         <p>{{ book.Autor }}</p>
@@ -34,12 +32,13 @@ import { ref, computed, watch } from 'vue';
 import API from '../services/api';
 
 const displayedBooks = ref([]);
+
 getBooks();
 
 async function getBooks() {
     try {
         const { data } = await API.get('book');
-        displayedBooks.value = data;
+        displayedBooks.value = data.map(book => ({ ...book, imageLoaded: false }));
     } catch (err) {
         console.log(err);
     }
@@ -118,11 +117,51 @@ function changeYear(offset) {
     justify-content: space-between;
     min-height: 300px;
     position: relative;
+    background-color: var(--color-gray);
+    overflow: hidden;
+}
+
+.grid-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.grid-item .image-loaded {
+    opacity: 1;
+}
+
+.grid-item .book-info {
+    z-index: 1;
 }
 
 .double-size {
     grid-column-end: span 2;
     grid-row-end: span 2;
+}
+
+.book-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+
+.book-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .book-info {
@@ -163,16 +202,17 @@ function changeYear(offset) {
     font-size: 1rem;
 }
 
-#logo {
-    height: 100px;
+.logo {
+    height: 50px;
     display: block;
-    margin: 0 auto;
+    margin: 2rem auto 1rem auto;
 }
 
 #title {
     text-align: center;
     font-size: 4rem;
     margin-bottom: 4rem;
+    margin-top: 0;
 }
 
 .controls {
@@ -222,11 +262,18 @@ select:focus {
     text-align: center;
 }
 
-#titleContainer{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2rem;
+@media screen and (max-width: 767px) {
+    #title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+  .double-size {
+    grid-column-end: span 1;
+    grid-row-end: span 1;
+  }
 }
 </style>
   
