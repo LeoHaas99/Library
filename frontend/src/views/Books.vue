@@ -90,13 +90,13 @@ function changeYear(offset) {
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
+    margin-bottom: 2rem;
 }
 
 .year-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 3rem;
-    margin-bottom: 2rem;
     grid-auto-flow: dense;
 }
 
@@ -156,13 +156,28 @@ select:focus {
     outline: none;
 }
 
-/* Add the following styles for additional responsiveness */
-@media screen and (max-width: 767px) {
-    #title {
-        font-size: 2.5rem;
-        margin-bottom: 2rem;
-    }
+@media screen and (max-width: 1200px) {
+  .year-grid {
+    grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+    gap: 2rem;
+  }
 }
-</style>
 
-  
+@media screen and (max-width: 767px) {
+  #title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .year-grid {
+    gap: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .year-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    gap: 1rem;
+  }
+}
+
+</style>
